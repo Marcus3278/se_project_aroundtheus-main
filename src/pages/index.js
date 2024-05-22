@@ -35,7 +35,7 @@ handleValidation(updateAvatarFormValidator);
 const api = new Api({ 
   baseURL: "https://around-api.en.tripleten-services.com/v1",
 headers: {
-  authorization: "88b806e8-38c4-4e0a-8ef0-73fdc149b74c",
+  authorization: "06384f1a-a606-42fb-9776-b06e7d5ab968",
   "Content-Type": "application/json",
 },
 });
