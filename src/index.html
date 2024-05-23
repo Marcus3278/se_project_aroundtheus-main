@@ -16,21 +16,11 @@
       </header>
       <main class="content">
         <section class="profile page__section">
-          <div class="profile-picture-container">
-            <img
-              src="<%=require('./images/jacques-cousteau.jpg')%>"
-              alt="Jacques Cousteau Avatar"
-              class="profile__image"
-            />
-            <div class="profile-avatar-overlay">
-              <button
-                class="avatar-profile__edit-button"
-                id="avatar-profile-edit-button"
-                type="button"
-                aria-label="Edit Avatar"
-              ></button>
-            </div>
-          </div>
+          <img
+            src="<%=require('./images/jacques-cousteau.jpg')%>"
+            alt="Jacques Cousteau Avatar"
+            class="profile__image"
+          />
           <div class="profile__info">
             <h1 class="profile__heading">Jacques Cousteau</h1>
             <button
@@ -53,10 +43,9 @@
         </section>
       </main>
       <footer class="footer page__section">
-        <p class="footer__content">&copy; 2024 Around the U.S.</p>
+        <p class="footer__content">&copy; 2023 Around the U.S.</p>
       </footer>
     </div>
-    
     <!--Edit Profile Modal-->
     <div class="modal" id="profile-edit-modal">
       <div class="modal__container">
@@ -93,7 +82,6 @@
         </form>
       </div>
     </div>
-
     <!--Add Card Modal-->
     <div class="modal" id="add-card-modal">
       <div class="modal__container">
@@ -134,7 +122,6 @@
         </form>
       </div>
     </div>
-
     <!--Image Preview Modal-->
     <div class="modal" id="image-preview-modal">
       <div class="preview-image-modal__container">
@@ -144,53 +131,22 @@
       </div>
     </div>
 
-    <!--Delete Modal-->
-    <div class="modal" id="delete-modal">
-      <div class="modal__container delete-modal__container">
-        <button class="modal__close"></button>
-        <form class="modal__form form">
-          <p class="modal__heading">Are you sure?</p>
-          <button class="modal__button" type="submit">Yes</button>
-        </form>
-      </div>
-    </div>
-
-    <!--Edit Avatar Modal-->
-    <div class="modal" id="avatar-edit-modal">
-      <div class="modal__container avatar-modal__container">
-        <button class="modal__close"></button>
-        <form class="modal__form form">
-          <p class="modal__heading">Change profile picture</p>
-          <label class="modal__label">
-            <input
-              id="avatar-image-url"
-              type="url"
-              name="avatar"
-              placeholder="Avatar Image URL"
-              class="modal__input modal__input_type_url"
-              required
-            />
-            <span class="modal__error" id="avatar-image-url-error"></span>
-          </label>
-          <button
-            class="modal__button modal__button_disabled"
-            type="submit"
-            disabled
-          >
-            Save
-          </button>
-        </form>
-      </div>
-    </div>
-
     <template id="card-template">
       <li class="card">
         <img class="card__image" src="" alt="" />
         <div class="card__description">
           <h2 class="card__title"></h2>
-          <button class="card__like-button" type="button" aria-label="Like"></button>
+          <button
+            class="card__like-button"
+            type="button"
+            aria-label="Like"
+          ></button>
         </div>
-        <button class="card__delete-button" type="button" aria-label="Delete"></button>
+        <button
+          class="card__delete-button"
+          type="button"
+          aria-label="Delete"
+        ></button>
       </li>
     </template>
   </body>
