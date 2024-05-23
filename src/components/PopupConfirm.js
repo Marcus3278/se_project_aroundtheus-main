@@ -1,33 +1,33 @@
 import Popup from "./Popup.js";
 import { selectors } from "../utils/constants.js";
 
-export default class PopupWithForm extends Popup {
+export default class PopupConfirm extends Popup {
   constructor(popupSelector, handleFormSubmit) {
     super({ popupSelector });
     this._popupForm = this._popupElement.querySelector(selectors.popupForm);
     this._submitButtonElement = this._popupElement.querySelector(selectors.submitButtonSelector);
     this._handleFormSubmit = handleFormSubmit;
-    this._progressButtonText = selectors.savingButtonText;
-    this._defaultButtonText = selectors.saveButtonDefaultText;
-  }
-
-  _getInputValues() {
-    return new FormData(this._popupForm);
+    this._progressButtonText = selectors.deletingButtonText;
+    this._defaultButtonText = selectors.deletingButtonDefaultText;
   }
 
   setEventListeners() {
     this._popupForm.addEventListener("submit", (event) => {
       event.preventDefault();
-      this._handleFormSubmit(this._getInputValues());
+      this._handleFormSubmit();
     });
     super.setEventListeners();
   }
 
-  showButtonProgress(showButtonProgress) {
-    this._submitButtonElement.textContent = showButtonProgress ? this._progressButtonText : this._defaultButtonText;
+  setSubmitAction(action) {
+    this._handleFormSubmit = action;
   }
 
-  reset() {
-    this._popupForm.reset();
-  }
+  showButtonProgress(showButtonProgress) {
+    if (showButtonProgress) {
+      this._submitButtonElement.textContent = this._progressButtonText;
+    } else {
+     this._submitButtonElement.textContent = this._defaultButtonText;
+    }
+  };
 }

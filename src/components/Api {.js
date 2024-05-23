@@ -4,12 +4,10 @@ export default class Api {
     this._headers = headers;
   }
 
-  _checkResponse(res) {
-    return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
-  }
-
   _fetch(url, options = {}) {
-    return fetch(url, { headers: this._headers, ...options }).then(this._checkResponse);
+    const { method = "GET", body } = options;
+    return fetch(url, { ...options, headers: this._headers, method, body: body && JSON.stringify(body) })
+      .then(res => res.ok ? res.json() : Promise.reject(new Error(`Error: ${res.status}`)));
   }
 
   getInitialCards() {
@@ -20,40 +18,28 @@ export default class Api {
     return this._fetch(`${this._baseURL}/users/me`);
   }
 
-  updateUserInfo(name, about) {
-    return this._fetch(`${this._baseURL}/users/me`, {
-      method: "PATCH",
-      body: JSON.stringify({ name, about }),
-    });
+  updateUserInfo({ name, about }) {
+    return this._fetch(`${this._baseURL}/users/me`, { method: "PATCH", body: JSON.stringify({ name, about }) });
   }
 
-  addNewCard(name, link) {
-    return this._fetch(`${this._baseURL}/cards`, {
-      method: "POST",
-      body: JSON.stringify({ name, link }),
-    });
+  addNewCard({ name, link }) {
+    return this._fetch(`${this._baseURL}/cards`, { method: "POST", body: JSON.stringify({ name, link }) });
   }
 
   deleteCard(_id) {
-    return this._fetch(`${this._baseURL}/cards/${_id}`, {
-      method: "DELETE",
-    });
+    return this._fetch(`${this._baseURL}/cards/${_id}`, { method: "DELETE" });
   }
 
   setLike(_id, isLiked) {
-    return this._fetch(`${this._baseURL}/cards/${_id}/likes`, {
-      method: isLiked ? "DELETE" : "PUT",
-    });
+    return this._fetch(`${this._baseURL}/cards/${_id}/likes`, { method: isLiked ? "DELETE" : "PUT" });
   }
 
-  updateProfilePicture(avatar) {
-    return this._fetch(`${this._baseURL}/users/me/avatar`, {
-      method: "PATCH",
-      body: JSON.stringify({ avatar }),
-    });
+  updateProfilePicture({ avatar }) {
+    return this._fetch(`${this._baseURL}/users/me/avatar`, { method: "PATCH", body: JSON.stringify({ avatar }) });
   }
 
   initialPageLoad() {
     return Promise.all([this.getInitialCards(), this.getUserInfo()]);
   }
 }
+
