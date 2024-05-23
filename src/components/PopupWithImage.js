@@ -4,14 +4,20 @@ import { selectors } from "../utils/constants.js";
 export default class PopupWithImage extends Popup {
   constructor(popupSelector) {
     super({ popupSelector });
-    this._popupImage = this._popupElement.querySelector(selectors.cardImage);
+    this._popupImage = this._popupElement && this._popupElement.querySelector(selectors.cardImage);
   }
 
   open(name, link) {
-    this._popupElement.querySelector(selectors.cardDescription).textContent = name;
+    const cardDescriptionElement = this._popupElement && this._popupElement.querySelector(selectors.cardDescription);
+    if (cardDescriptionElement) {
+      cardDescriptionElement.textContent = name;
+    }
 
-    this._popupImage.src = link;
-    this._popupImage.alt = name;
+    if (this._popupImage) {
+      this._popupImage.src = link;
+      this._popupImage.alt = name;
+    }
     super.open();
   }
 }
+
