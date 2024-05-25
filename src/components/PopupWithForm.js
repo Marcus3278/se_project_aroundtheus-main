@@ -4,71 +4,39 @@ import { selectors } from "../utils/constants.js";
 export default class PopupWithForm extends Popup {
   constructor(popupSelector, handleFormSubmit) {
     super({ popupSelector });
-
-    // Ensure the popup element exists
-    if (!this.popupElement) {
-      throw new Error(`Popup element with selector "${popupSelector}" not found`);
-    }
-
-    // Cache selectors for efficiency
-    this.popupForm = this.popupElement.querySelector(selectors.popupForm);
-    this.inputElements = this.popupForm.querySelectorAll(selectors.popupInput);
-    this.submitButtonElement = this.popupElement.querySelector(selectors.submitButtonSelector);
-
-    if (!this.popupForm) {
-      throw new Error(`Form element with selector "${selectors.popupForm}" not found`);
-    }
-    if (!this.submitButtonElement) {
-      throw new Error(`Submit button with selector "${selectors.submitButtonSelector}" not found`);
-    }
-
-    this.handleFormSubmit = handleFormSubmit;
-    if (typeof this.handleFormSubmit !== 'function') {
-      throw new Error('handleFormSubmit should be a function');
-    }
-
-    this.progressButtonText = selectors.savingButtonText || 'Saving...';
-    this.defaultButtonText = selectors.saveButtonDefaultText || 'Save';
+    this._popupForm = this._popupElement.querySelector(selectors.popupForm);
+    this._inputElements = this._popupForm.querySelectorAll(selectors.popupInput);
+    this._submitButtonElement = this._popupElement.querySelector(selectors.submitButtonSelector);
+    this._handleFormSubmit = handleFormSubmit;
+    this._progressButtonText = selectors.savingButtonText;
+    this._defaultButtonText = selectors.saveButtonDefaultText;
   }
 
-  // Method to get input values from the form
-  getInputValues() {
+  _getInputValues() {
     const inputValues = {};
-    this.inputElements.forEach(element => {
+    this._inputElements.forEach((element) => {
       inputValues[element.name] = element.value;
     });
     return inputValues;
   }
 
-  // Method to set input values in the form
-  setInputValues(data) {
-    this.inputElements.forEach(input => {
-      input.value = data[input.name];
-    });
-  }
-
-  // Method to set event listeners
   setEventListeners() {
-    this.popupForm.addEventListener("submit", (event) => {
+    this._popupForm.addEventListener("submit", (event) => {
       event.preventDefault();
-      this.handleFormSubmit(this.getInputValues());
+      this._handleFormSubmit(this._getInputValues());
     });
     super.setEventListeners();
   }
 
-  // Method to show button progress
-  renderLoading(isLoading, loadingText = this.progressButtonText) {
-    this.submitButtonElement.textContent = isLoading ? loadingText : this.defaultButtonText;
-  }
+  showButtonProgress(showButtonProgress) {
+     if (showButtonProgress) {
+       this._submitButtonElement.textContent = this._progressButtonText;
+     } else {
+      this._submitButtonElement.textContent = this._defaultButtonText;
+     }
+   };
 
-  // Method to reset the form
-  reset() {
-    this.popupForm.reset();
-  }
-
-  close() {
-    super.close();
-    this.reset();
-  }
+   reset() {
+    this._popupForm.reset();
+   }
 }
-
