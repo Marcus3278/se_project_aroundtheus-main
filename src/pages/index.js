@@ -121,8 +121,10 @@ addCardAddButton.addEventListener("click", () => {
 
 updateProfileButton.addEventListener("click", () => {
   const userData = userInfo.getUserInfo();
-  profileHeadingInput.value = userData.name;
-  profileDescriptionInput.value = userData.about;
+  updateProfilePopup.setInputValues({
+    name: userData.name,
+    about: userData.about
+  });
   editProfileFormValidator.resetValidation();
   updateProfilePopup.open();
 });
@@ -132,28 +134,20 @@ updateAvatarButton.addEventListener("click", () => {
 });
 
 // ! ||--------------------------------------------------------------------------------||
-// ! ||                                 Functions                                 ||
+// ! ||                                 Functions                                      ||
 // ! ||--------------------------------------------------------------------------------||
 function handleValidation(form) {
   form.enableValidation();
 }
 
 function handleAddCardFormSubmit(cardData) {
-  newCardPopup.showButtonProgress(true);
-  api
-    .addNewCard(cardData.name, cardData.link)
-    .then((res) => {
+  function makeRequest() {
+    return api.addNewCard(cardData.name, cardData.link).then((res) => {
       const card = renderCard(res);
       cardSection.addItem(card);
-      newCardPopup.reset();
-      newCardPopup.close();
-    })
-    .catch((err) => {
-      console.error(`Error: ${err}`);
-    })
-    .finally(() => {
-      newCardPopup.showButtonProgress(false);
     });
+  }
+  handleSubmit(makeRequest, newCardPopup);
 }
 
 function handleImageClick(name, link) {
@@ -161,38 +155,23 @@ function handleImageClick(name, link) {
 }
 
 function handleProfileSubmit(userData) {
-  updateProfilePopup.showButtonProgress(true);
-  api
-    .updateUserInfo(userData.name, userData.about)
-    .then((user) => {
+  function makeRequest() {
+    return api.updateUserInfo(userData.name, userData.about).then((user) => {
       userInfo.setUserInfo(user);
-      updateProfilePopup.reset();
-      updateProfilePopup.close();
-    })
-    .catch((err) => {
-      console.error(`Error: ${err}`);
-    })
-    .finally(() => {
-      updateProfilePopup.showButtonProgress(false);
     });
+  }
+  handleSubmit(makeRequest, updateProfilePopup);
 }
 
 function handleDeleteCard(cardData) {
   deletePopup.open();
   deletePopup.setSubmitAction(() => {
-    deletePopup.showButtonProgress(true);
-    api
-      .deleteCard(cardData._id)
-      .then((res) => {
+    function makeRequest() {
+      return api.deleteCard(cardData._id).then(() => {
         cardData.handleRemoveCard();
-        deletePopup.close();
-      })
-      .catch((err) => {
-        console.error(`Error: ${err}`);
-      })
-      .finally(() => {
-        deletePopup.showButtonProgress(false);
       });
+    }
+    handleSubmit(makeRequest, deletePopup);
   });
 }
 
@@ -208,18 +187,11 @@ function handleLikeIcon(cardData) {
 }
 
 function handleEditAvatar(data) {
-  avatarPopup.showButtonProgress(true);
-  api
-    .updateProfilePicture(data.avatar)
-    .then((user) => {
+  function makeRequest() {
+    return api.updateProfilePicture(data.avatar).then((user) => {
       userInfo.setUserAvatar(user.avatar);
-      avatarPopup.reset();
-      avatarPopup.close();
-    })
-    .catch((err) => {
-      console.error(`Error: ${err}`);
-    })
-    .finally(() => {
-      avatarPopup.showButtonProgress(false);
     });
+  }
+  handleSubmit(makeRequest, avatarPopup);
 }
+
