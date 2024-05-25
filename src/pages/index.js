@@ -10,6 +10,19 @@ import { selectors, formValidationConfig } from "../utils/constants.js";
 import "../pages/index.css";
 import { data } from "autoprefixer";
 
+// Universal handleSubmit function
+function handleSubmit(request, popupInstance, loadingText = "Saving...") {
+  popupInstance.renderLoading(true, loadingText);
+  request()
+    .then(() => {
+      popupInstance.close();
+    })
+    .catch(console.error)
+    .finally(() => {
+      popupInstance.renderLoading(false);
+    });
+}
+
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                    CONSTANTS                                   ||
 // ! ||--------------------------------------------------------------------------------||
@@ -194,4 +207,3 @@ function handleEditAvatar(data) {
   }
   handleSubmit(makeRequest, avatarPopup);
 }
-
