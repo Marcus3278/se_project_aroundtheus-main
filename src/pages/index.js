@@ -10,19 +10,6 @@ import { selectors, formValidationConfig } from "../utils/constants.js";
 import "../pages/index.css";
 import { data } from "autoprefixer";
 
-// Universal handleSubmit function
-function handleSubmit(request, popupInstance, loadingText = "Saving...") {
-  popupInstance.renderLoading(true, loadingText);
-  request()
-    .then(() => {
-      popupInstance.close();
-    })
-    .catch(console.error)
-    .finally(() => {
-      popupInstance.renderLoading(false);
-    });
-}
-
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                    CONSTANTS                                   ||
 // ! ||--------------------------------------------------------------------------------||
@@ -134,10 +121,8 @@ addCardAddButton.addEventListener("click", () => {
 
 updateProfileButton.addEventListener("click", () => {
   const userData = userInfo.getUserInfo();
-  updateProfilePopup.setInputValues({
-    name: userData.name,
-    about: userData.about
-  });
+  profileHeadingInput.value = userData.name;
+  profileDescriptionInput.value = userData.about;
   editProfileFormValidator.resetValidation();
   updateProfilePopup.open();
 });
@@ -147,20 +132,28 @@ updateAvatarButton.addEventListener("click", () => {
 });
 
 // ! ||--------------------------------------------------------------------------------||
-// ! ||                                 Functions                                      ||
+// ! ||                                 Functions                                 ||
 // ! ||--------------------------------------------------------------------------------||
 function handleValidation(form) {
   form.enableValidation();
 }
 
 function handleAddCardFormSubmit(cardData) {
-  function makeRequest() {
-    return api.addNewCard(cardData.name, cardData.link).then((res) => {
+  newCardPopup.showButtonProgress(true);
+  api
+    .addNewCard(cardData.name, cardData.link)
+    .then((res) => {
       const card = renderCard(res);
       cardSection.addItem(card);
+      newCardPopup.reset();
+      newCardPopup.close();
+    })
+    .catch((err) => {
+      console.error(`Error: ${err}`);
+    })
+    .finally(() => {
+      newCardPopup.showButtonProgress(false);
     });
-  }
-  handleSubmit(makeRequest, newCardPopup);
 }
 
 function handleImageClick(name, link) {
@@ -168,29 +161,44 @@ function handleImageClick(name, link) {
 }
 
 function handleProfileSubmit(userData) {
-  function makeRequest() {
-    return api.updateUserInfo(userData.name, userData.about).then((user) => {
+  updateProfilePopup.showButtonProgress(true);
+  api
+    .updateUserInfo(userData.name, userData.about)
+    .then((user) => {
       userInfo.setUserInfo(user);
+      updateProfilePopup.reset();
+      updateProfilePopup.close();
+    })
+    .catch((err) => {
+      console.error(`Error: ${err}`);
+    })
+    .finally(() => {
+      updateProfilePopup.showButtonProgress(false);
     });
-  }
-  handleSubmit(makeRequest, updateProfilePopup);
 }
 
 function handleDeleteCard(cardData) {
   deletePopup.open();
   deletePopup.setSubmitAction(() => {
-    function makeRequest() {
-      return api.deleteCard(cardData._id).then(() => {
+    deletePopup.showButtonProgress(true);
+    api
+      .deleteCard(cardData._id)
+      .then((res) => {
         cardData.handleRemoveCard();
+        deletePopup.close();
+      })
+      .catch((err) => {
+        console.error(`Error: ${err}`);
+      })
+      .finally(() => {
+        deletePopup.showButtonProgress(false);
       });
-    }
-    handleSubmit(makeRequest, deletePopup);
   });
 }
 
 function handleLikeIcon(cardData) {
   api
-    .setLike(cardData.id, cardData.isLiked)
+    .setLike(cardData._id, cardData._isLiked)
     .then((res) => {
       cardData.handleLikeIcon(res.isLiked);
     })
@@ -200,10 +208,23 @@ function handleLikeIcon(cardData) {
 }
 
 function handleEditAvatar(data) {
-  function makeRequest() {
-    return api.updateProfilePicture(data.avatar).then((user) => {
+  avatarPopup.showButtonProgress(true);
+  api
+    .updateProfilePicture(data.avatar)
+    .then((user) => {
       userInfo.setUserAvatar(user.avatar);
+      avatarPopup.reset();
+      avatarPopup.close();
+    })
+    .catch((err) => {
+      console.error(`Error: ${err}`);
+    })
+    .finally(() => {
+      avatarPopup.showButtonProgress(false);
     });
-  }
-  handleSubmit(makeRequest, avatarPopup);
 }
+
+// Call the handleValidation function for each form validator
+handleValidation(editProfileFormValidator);
+handleValidation(cardFormValidator);
+handleValidation(updateAvatarFormValidator);
