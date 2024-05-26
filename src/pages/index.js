@@ -129,6 +129,7 @@ updateProfileButton.addEventListener("click", () => {
 
 updateAvatarButton.addEventListener("click", () => {
   avatarPopup.open();
+  updateAvatarFormValidator.toggleButtonState()  // disable the button
 });
 
 // ! ||--------------------------------------------------------------------------------||
@@ -198,7 +199,7 @@ function handleDeleteCard(cardData) {
 
 function handleLikeIcon(cardData) {
   api
-    .setLike(cardData._id, cardData._isLiked)
+    .setLike(cardData.id, cardData.isLiked)
     .then((res) => {
       cardData.handleLikeIcon(res.isLiked);
     })
