@@ -15,18 +15,18 @@ export default class Card {
 
   _getTemplate() {
     return document
-    .querySelector(this._cardSelector)
-    .content.querySelector(".card")
-    .cloneNode(true);
+      .querySelector(this._cardSelector)
+      .content.querySelector(".card")
+      .cloneNode(true);
   }
 
   _setEventListeners() {
     this._likeButton.addEventListener("click", () => {
-        this._handleLikeIcon();
-      });
+      this._handleLikeIcon();
+    });
 
     this._deleteButton.addEventListener("click", () => {
-        this._handleDeleteCard();
+      this._handleDeleteCard();
     });
 
     this._cardImageElement.addEventListener('click', () => {
