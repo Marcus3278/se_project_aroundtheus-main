@@ -4,15 +4,15 @@ export default class Card {
   constructor(data, cardSelector, handleImageClick, handleDeleteCard, handleLikeIcon) {
     this._name = data.name;
     this._link = data.link;
-    this.id = data._id; // Changed from this._id
-    this.isLiked = data.isLiked; // Changed from this._isLiked
+    this.id = data._id; // Properly using this.id for referencing outside
+    this.isLiked = data.isLiked; // Utilizing public property directly
     this._cardSelector = cardSelector;
     this._handleImageClick = handleImageClick;
-    this._handleDeleteCard = handleDeleteCard;
+    this._handleDeleteCard = handleDeleteCache;
     this._handleLikeIcon = handleLikeIcon;
     this._cardElement = this._getTemplate();
     this._likeButton = this._cardElement.querySelector(cardselectors.cardLike);
-    this._deleteButton = this._cardelElement.querySelector(cardselectors.cardDelete);
+    this._deleteButton = this._cardElement.querySelector(cardselectors.cardDelete); // Correct typo: cardelElement -> cardElement
     this._cardTitleElement = this._cardElement.querySelector(cardselectors.cardTitle);
     this._cardImageElement = this._cardElement.querySelector(cardselectors.cardImage);
   }
@@ -30,7 +30,7 @@ export default class Card {
     });
 
     this._deleteButton.addEventListener("click", () => {
-      this._handleDeleteCard(this);
+      this._handleDeleteCard(this.id); // Modified to use this.id
     });
 
     this._cardImageElement.addEventListener('click', () => {
@@ -39,7 +39,7 @@ export default class Card {
   }
 
   _renderLikeIcon() {
-    if (this.isLiked) { // Adjusted to reflect the new property name
+    if (this.isLiked) {
       this._likeButton.classList.add(cardselectors.cardLikeToggle);
     } else {
       this._likeButton.classList.remove(cardselectors.cardLikeToggle);
@@ -47,7 +47,7 @@ export default class Card {
   }
 
   handleLikeIcon(isLiked) {
-    this.isLiked = isLiked; // Adjusted to reflect the new property name
+    this.isLiked = isLiked;
     this._renderLikeIcon();
   }
 
