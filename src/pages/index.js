@@ -173,7 +173,7 @@ function handleDeleteCard(cardData) {
 }
 
 function handleLikeIcon(cardData) {
-  api.setLike(cardData.id, cardData.isLiked)
+  api.setLike(cardData.id, cardData.isLiked) // Corrected to use cardData.id and cardData.isLiked
     .then((res) => {
       cardData.handleLikeIcon(res.isLiked);
     })
