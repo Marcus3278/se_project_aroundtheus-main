@@ -8,7 +8,7 @@ export default class Card {
     this.isLiked = data.isLiked; // Utilizing public property directly
     this._cardSelector = cardSelector;
     this._handleImageClick = handleImageClick;
-    this._handleDeleteCard = handleDeleteCache;
+    this._handleDeleteCard = handleDeleteCard;
     this._handleLikeIcon = handleLikeIcon;
     this._cardElement = this._getTemplate();
     this._likeButton = this._cardElement.querySelector(cardselectors.cardLike);
