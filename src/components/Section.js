@@ -36,4 +36,13 @@ export default class Section {
     }
     this._container.append(element);
   }
+
+  // Method to set new items and re-render them
+  setItems(items) {
+    if (!Array.isArray(items)) {
+      throw new Error('Items should be an array');
+    }
+    this._items = items;
+    this.renderItems();
+  }
 }
