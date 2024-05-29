@@ -30,7 +30,7 @@ export default class Card {
     });
 
     this._deleteButton.addEventListener("click", () => {
-      this._handleDeleteCard(this.id); // Modified to use this.id
+      this._handleDeleteCard(this); // Modified to use this.id
     });
 
     this._cardImageElement.addEventListener('click', () => {
