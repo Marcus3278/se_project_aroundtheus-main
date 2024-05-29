@@ -17,7 +17,7 @@ const profileFormElement = document.querySelector(selectors.profilePopup);
 const avatarFormElement = document.querySelector(selectors.avatarPopup);
 const profileHeadingInput = profileFormElement.querySelector(selectors.profileName);
 const profileDescriptionInput = profileFormElement.querySelector(selectors.profileDescription);
-const avatarURLInput = avatarFormElement.querySelector(selectors.avatarURL); // Correct association with avatar form
+const avatarURLInput = avatarFormElement.querySelector(selectors.avatarURL);
 const newImagePopup = new PopupWithImage(selectors.cardImagePopup);
 const updateAvatarButton = document.querySelector(selectors.avatarEditButton);
 newImagePopup.setEventListeners();
@@ -58,7 +58,6 @@ let cardSection = new Section({
 api.initialPageLoad()
   .then(([cards, user]) => {
     cardSection.setItems(cards);
-    cardSection.renderItems();
     userInfo.setUserInfo(user);
     userInfo.setUserAvatar(user.avatar);
   })
@@ -109,7 +108,7 @@ updateProfileButton.addEventListener("click", () => {
 
 updateAvatarButton.addEventListener("click", () => {
   avatarPopup.open();
-  updateAvatarFormValidator.toggleButtonState();  // Initially disable the button
+  updateAvatarFormValidator.toggleButtonState();
 });
 
 // FUNCTION HANDLERS
@@ -158,7 +157,7 @@ function handleDeleteCard(cardData) {
   deletePopup.open();
   deletePopup.setSubmitAction(() => {
     deletePopup.showButtonProgress(true);
-    api.deleteCard(cardData.id) // Corrected to use cardData.id
+    api.deleteCard(cardData.id)
       .then(() => {
         cardData.handleRemoveCard();
         deletePopup.close();
@@ -173,7 +172,7 @@ function handleDeleteCard(cardData) {
 }
 
 function handleLikeIcon(cardData) {
-  api.setLike(cardData.id, cardData.isLiked) // Corrected to use cardData.id and cardData.isLiked
+  api.setLike(cardData.id, cardData.isLiked)
     .then((res) => {
       cardData.handleLikeIcon(res.isLiked);
     })
