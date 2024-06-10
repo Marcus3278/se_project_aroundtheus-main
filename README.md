@@ -10,4 +10,4 @@ Here is my Github repository: https://github.com/Marcus3278/SE-Project-Around-th
 
 link to my video covering the project https://drive.google.com/file/d/15rVfz-rzkfzcBKP9qhMT-3IihqV66ZIF/view?usp=sharing
 
-![Screenshot 2024-01-23 114338](https://github.com/Marcus3278/Around-the-usa-/assets/112821776/59adf6d7-d240-45d9-a388-62011ee42450)
+![Screenshot 2024-01-23 114338] (https://github.com/Marcus3278/Around-the-usa-/assets/112821776/59adf6d7-d240-45d9-a388-62011ee42450)
