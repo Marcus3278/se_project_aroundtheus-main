@@ -9,9 +9,7 @@ import UserInfo from "../components/UserInfo.js";
 import { selectors, formValidationConfig } from "../utils/constants.js";
 import "../pages/index.css";
 
-// ! ||--------------------------------------------------------------------------------||
-// ! ||                                    CONSTANTS                                   ||
-// ! ||--------------------------------------------------------------------------------||
+// Constants
 const addCardAddButton = document.querySelector(selectors.cardAddButton);
 const updateProfileButton = document.querySelector(selectors.profileEditButton);
 const cardFormElement = document.querySelector(selectors.cardPopup);
@@ -21,10 +19,9 @@ const profileHeadingInput = profileFormElement.querySelector(selectors.profileNa
 const profileDescriptionInput = profileFormElement.querySelector(selectors.profileDescription);
 const newImagePopup = new PopupWithImage(selectors.cardImagePopup);
 const updateAvatarButton = document.querySelector(selectors.avatarEditButton);
-const avatarURLInput = profileFormElement.querySelector(selectors.avatarURL);
 
-// Initialize popups and form validators
 newImagePopup.setEventListeners();
+
 const editProfileFormValidator = new FormValidator(formValidationConfig, profileFormElement);
 const cardFormValidator = new FormValidator(formValidationConfig, cardFormElement);
 const updateAvatarFormValidator = new FormValidator(formValidationConfig, avatarFormElement);
@@ -33,23 +30,14 @@ handleValidation(editProfileFormValidator);
 handleValidation(cardFormValidator);
 handleValidation(updateAvatarFormValidator);
 
-// API instance
-const api = new Api({
-  baseURL: "https://around-api.en.tripleten-services.com/v1",
-  headers: {
-    authorization: "06384f1a-a606-42fb-9776-b06e7d5ab968",
-    "Content-Type": "application/json",
-  },
-});
-
-// User Info instance
 const userInfo = new UserInfo({
   nameSelector: selectors.profileHeadingElement,
   descriptionSelector: selectors.profileDescriptionElement,
   avatarSelector: selectors.avatarImageElement,
 });
 
-// Initial card section
+s
+
 let cardSection;
 api
   .initialPageLoad()
@@ -72,21 +60,6 @@ api
     console.error(`Error: ${err}`);
   });
 
-// Profile popup
-const updateProfilePopup = new PopupWithForm(selectors.profilePopup, handleProfileSubmit);
-updateProfilePopup.setEventListeners();
-
-// New card popup
-const newCardPopup = new PopupWithForm(selectors.cardPopup, handleAddCardFormSubmit);
-newCardPopup.setEventListeners();
-
-// Delete card popup
-const deletePopup = new PopupConfirm(selectors.deletePopup, handleDeleteCard);
-deletePopup.setEventListeners();
-
-// Edit avatar popup
-const avatarPopup = new PopupWithForm(selectors.avatarPopup, handleEditAvatar);
-avatarPopup.setEventListeners();
 
 // Event Listeners
 addCardAddButton.addEventListener("click", () => {
@@ -113,7 +86,7 @@ function handleValidation(form) {
 
 function handleAddCardFormSubmit(cardData) {
   newCardPopup.showButtonProgress(true);
-  api.addNewCard(cardData.name, cardData.link)
+
     .then((res) => {
       const card = renderCard(res);
       cardSection.addItem(card);
@@ -134,7 +107,7 @@ function handleImageClick(name, link) {
 
 function handleProfileSubmit(userData) {
   updateProfilePopup.showButtonProgress(true);
-  api.updateUserInfo(userData.name, userData.about)
+
     .then((user) => {
       userInfo.setUserInfo(user);
       updateProfilePopup.reset();
@@ -152,8 +125,7 @@ function handleDeleteCard(cardData) {
   deletePopup.open();
   deletePopup.setSubmitAction(() => {
     deletePopup.showButtonProgress(true);
-    api.deleteCard(cardData._id)
-      .then(() => {
+
         cardData.handleRemoveCard();
         deletePopup.close();
       })
@@ -167,7 +139,7 @@ function handleDeleteCard(cardData) {
 }
 
 function handleLikeIcon(cardData) {
-  api.setLike(cardData._id, cardData._isLiked)
+
     .then((res) => {
       cardData.handleLikeIcon(res.isLiked);
     })
@@ -178,7 +150,7 @@ function handleLikeIcon(cardData) {
 
 function handleEditAvatar(data) {
   avatarPopup.showButtonProgress(true);
-  api.updateProfilePicture(data.avatar)
+
     .then((user) => {
       userInfo.setUserAvatar(user.avatar);
       avatarPopup.reset();
@@ -192,14 +164,3 @@ function handleEditAvatar(data) {
     });
 }
 
-// Render card function
-function renderCard(item) {
-  const card = new Card(
-    item,
-    selectors.cardTemplate,
-    handleImageClick,
-    handleDeleteCard,
-    handleLikeIcon
-  );
-  return card.generateCard();
-}
